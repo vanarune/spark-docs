@@ -1,0 +1,9 @@
+def printRecordsPerPartition(df:org.apache.spark.sql.Dataset[Row]): Unit = {
+  println("Per-Partition Counts:")
+  
+  val results = df.rdd                                   // Convert to an RDD
+    .mapPartitions(it => Array(it.size).iterator, true)  // For each partition, count
+    .collect()                                           // Return the counts to the driver
+
+  results.foreach(x => println("* " + x))
+}
