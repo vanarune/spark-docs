@@ -1,0 +1,21 @@
+
+def IPConvert ( s: String) : Long = 
+ {
+	       val array =  s.split("\\.")
+                  array(0).toLong *256*256*256+ array(1).toLong*256*256 +  array(2).toLong*256 + array(3).toLong
+ }
+
+import org.apache.spark.sql.expressions.UserDefinedFunction
+import org.apache.spark.sql.functions.udf
+
+val IPConvertUDF: UserDefinedFunction = udf((value:String) => {
+  IPConvert(value)
+})
+
+
+def timeIt[T](op: => T): Float = {
+	val start = System.currentTimeMillis
+	val res = op
+	val end = System.currentTimeMillis
+	(end - start) / 1000f
+}
