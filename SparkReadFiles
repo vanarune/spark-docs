@@ -4,3 +4,4 @@ val dupedDF =spark.read.format("csv")
             .option("inferSchema","true")
             .load("/mnt/training/dataframes/people-with-dups.txt")
             
+val wikiDF = spark.read.parquet("/mnt/training/wikipedia/pageviews/pageviews_by_second.parquet")
