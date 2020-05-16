@@ -1,1 +1,54 @@
 
+
+val kafkaDF = spark
+  .readStream
+  .option("kafka.bootstrap.servers", "server1.databricks.training:9092")
+  .option("subscribe", "en")
+  .format("kafka")
+  .load()
+  
+ val kafkaCleanDF = kafkaDF
+  .select(from_json($"value".cast(StringType), schema).alias("message"))
+  .select("message.*")
+  
+  for (s <- spark.streams.active)
+  s.stop()
+  
+  val schema = (new StructType)
+  .add("timestamp", TimestampType)
+  .add("url", StringType)
+  .add("userURL", StringType)
+  .add("pageURL", StringType)
+  .add("isNewPage", BooleanType)
+  .add("geocoding", (new StructType)
+    .add("countryCode2", StringType)
+    .add("city", StringType)
+    .add("latitude", StringType)
+    .add("country", StringType)
+    .add("longitude", StringType)
+    .add("stateProvince", StringType)
+    .add("countryCode3", StringType)
+    .add("user", StringType)
+    .add("namespace", StringType))
+    
+    
+    
+    val basePath = "%s/etl3s".format(getUserhome())
+val checkpointPath = "%s/joined.checkpoint".format(basePath)
+val joinedPath = "%s/joined".format(basePath)
+
+joinedDF
+  .writeStream                                   // Write the stream
+  .format("delta")                               // Use the delta format
+  .partitionBy("countryCode2")                   // Specify a feature to partition on
+  .option("checkpointLocation", checkpointPath)  // Specify where to log metadata
+  .option("path", joinedPath)                    // Specify the output path
+  .outputMode("append")                          // Append new records to the output path
+  .queryName(myStreamName)                       // The name of the stream
+  .start() 
+  
+  
+  	GZIP	Snappy	bzip2
+Compression ratio	high	medium	high
+CPU usage	medium	low	high
+Splittable	no	yes	no
