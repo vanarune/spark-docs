@@ -1,0 +1,10 @@
+scala> run_vol@fratlhadooappd8:/home/run_vol> spark-shell  --master yarn --deploy-mode client --jars /volcker/source_systems/dev4/lib/ojdbc6-11.2.0.1.0.jar
+
+spark-submit --deploy-mode cluster --jars /volcker/source_systems/dev4/lib/ojdbc6-11.2.0.3.jar sparkrun.py
+
+
+21/09/30 13:24:42 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-4a37ff18-4ae3-4813-9822-9b2e05c958e2
+run_vol@fratlhadooappd8:/home/run_vol> yarn logs -applicationId  application_1632982056598_0031 | less
+
+run_vol@fratlhadooappd8:/home/run_vol>
+run_vol@fratlhadooappd8:/home/run_vol>
